@@ -1,5 +1,6 @@
 import React from 'react';
-import { Alert,StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity} from 'react-native';
+import { Alert,StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity, FlatList } from 'react-native';
+
 import { studentService } from '../../services/student.js'
 export default class FormStudent extends React.Component {
   constructor(props) {
@@ -16,7 +17,8 @@ export default class FormStudent extends React.Component {
       date_born:"",
       gender:"",
       person_type:"",
-      password:""
+      password:"",
+      dataSource:[]
     }
   }
   cleanInputs(){
@@ -76,11 +78,6 @@ export default class FormStudent extends React.Component {
     this.cleanInputs()
   }
 
-  getStudents(e){
-    studentService.getAll()
-    this.cleanInputs()
-  }
-  
   getStudentById(e){
     studentService.getById(this.state.identification_number)
       .then(person => {
@@ -173,22 +170,24 @@ export default class FormStudent extends React.Component {
             value={this.state.date_born}
           />
           
-          <TextInput
-            placeholder="Digite el Genero (F, M)"
-            onChangeText={textInputValue => this.setState({ gender: textInputValue })}
-            underlineColorAndroid='transparent'
-            style={styles.styleInput}
-            value={this.state.gender}
-          />
+          <View style={styles.rowViewContainer}>
+            <TextInput
+              placeholder="Genero (F, M)"
+              onChangeText={textInputValue => this.setState({ gender: textInputValue })}
+              underlineColorAndroid='transparent'
+              style={styles.styleInputRow}
+              value={this.state.gender}
+            />
 
-          <TextInput
-            placeholder="Digite el tipo de person (S, T)"
-            onChangeText={textInputValue => this.setState({ person_type: textInputValue })}
-            underlineColorAndroid='transparent'
-            style={styles.styleInput}
-            value={this.state.person_type}
-          />
-          
+            <TextInput
+              placeholder="tipo de persona (S, T)"
+              onChangeText={textInputValue => this.setState({ person_type: textInputValue })}
+              underlineColorAndroid='transparent'
+              style={styles.styleInputRow}
+              value={this.state.person_type}
+            />
+          </View>
+         
           <TextInput
             placeholder="Digite la Contraseña"
             onChangeText={textInputValue => this.setState({ password: textInputValue })}
@@ -196,8 +195,8 @@ export default class FormStudent extends React.Component {
             autoComplete="password"
             underlineColorAndroid='transparent'
             style={styles.styleInput}
-            value={this.state.password}
-          />
+            value={this.state.password} />
+
           <View style={styles.containerButton}>
             <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.insertStudent.bind(this)}>
               <Text style={styles.TextStyle}> Insertar </Text>
@@ -207,9 +206,6 @@ export default class FormStudent extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.deleteStudent.bind(this)}>
               <Text style={styles.TextStyle}> Borrar </Text>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getStudents.bind(this)}>
-              <Text style={styles.TextStyle}> Listar </Text>
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getStudentById.bind(this)}>
               <Text style={styles.TextStyle}> Buscar </Text>
@@ -221,13 +217,13 @@ export default class FormStudent extends React.Component {
   }
 }
 
-
 const styles = StyleSheet.create({
     container: {
       alignItems: 'center',
       flex: 1,
       paddingTop: 15,
-      backgroundColor: '#fff'
+      backgroundColor: '#fff',
+      height:'100%'
     },
     containerButton:{ 
       justifyContent: 'center',
@@ -239,8 +235,6 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       marginBottom: 7,
       height: 40,
-      // borderBottomWidth: 1,
-      // borderBottomColor: '#8BC34A',
       width: '80%',
       borderWidth: 1,
       borderColor: '#8BC34A',
@@ -262,11 +256,18 @@ const styles = StyleSheet.create({
     },
   
     rowViewContainer: {
-      fontSize: 20,
-      paddingRight: 10,
-      paddingTop: 10,
-      paddingBottom: 10,
-    }
+      flexDirection: 'row'
+    },
+    styleInputRow: {
+      textAlign: 'center',
+      marginBottom: 7,
+      marginHorizontal: 10,
+      height: 40,
+      width: '38%',
+      borderWidth: 1,
+      borderColor: '#8BC34A',
+      borderRadius: 5,
+    },
   
   });
   

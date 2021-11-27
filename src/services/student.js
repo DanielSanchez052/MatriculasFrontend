@@ -29,9 +29,8 @@ export const studentService =  {
     },
     getAll : async ()=>{
         try {
-            const res = await fetchWithoutToken(`person/S/`)
-            console.log( await res.json())
-            return true
+            const res =  await fetchWithoutToken(`person/`)
+            return res
         } catch (error) {
             console.error(error)
         }

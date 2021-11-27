@@ -7,20 +7,21 @@ export default class FormGrade extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      id_grade:"",
+      number:"",
       name:"",
     }
   }
 
   cleanInputs(){
     this.setState({
-      id_grade:"",
+      number:"",
       name:"",
     })
   }
 
   insertGrade(e){
     gradesService.add({
+      number:parseInt(this.state.number),
       name:this.state.name
     })
 
@@ -29,6 +30,7 @@ export default class FormGrade extends React.Component {
 
   updateGrade(e){
     gradesService.edit({
+      number:parseInt(this.state.number),
       name:this.state.name
     })
     this.cleanInputs()
@@ -36,21 +38,17 @@ export default class FormGrade extends React.Component {
 
   deleteGrade(e){
     gradesService.delete({
-      id_grade:this.state.id_grade,
+      number:parseInt(this.state.number),
     })
     this.cleanInputs()
   }
 
-  getGrades(e){
-    gradesService.getAll()
-    this.cleanInputs()
-  }
-  
+
   getGradeById(e){
-    gradesService.getById(this.state.id_grade)
+    gradesService.getById(parseInt(this.state.number))
       .then(grade => {
-        this.setState({
-          id_grade:grade.id,
+        this.setState({  
+          number:grade.number.toString(),
           name:grade.name,
         })
       })
@@ -64,11 +62,11 @@ export default class FormGrade extends React.Component {
           <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 7 }}> Administrar Grados </Text>
 
           <TextInput
-            placeholder="Digite el id"
-            onChangeText={textInputValue => this.setState({ id_grade: textInputValue })}
+            placeholder="Digite el numero del grado"
+            onChangeText={textInputValue => this.setState({ number: textInputValue })}
             underlineColorAndroid='transparent'
             style={styles.styleInput}
-            value={this.state.id_grade}
+            value={this.state.number}
           />
 
           <TextInput
@@ -88,9 +86,6 @@ export default class FormGrade extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.deleteGrade.bind(this)}>
               <Text style={styles.TextStyle}> Borrar </Text>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getGrades.bind(this)}>
-              <Text style={styles.TextStyle}> Listar </Text>
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getGradeById.bind(this)}>
               <Text style={styles.TextStyle}> Buscar </Text>

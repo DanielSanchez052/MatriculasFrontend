@@ -7,20 +7,21 @@ export default class FormDepartment extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      id_department:"",
+      number:"",
       name:"",
     }
   }
 
   cleanInputs(){
     this.setState({
-      id_department:"",
+      number:"",
       name:"",
     })
   }
 
   insertDepartment(e){
     departmentService.add({
+      number: parseInt(this.state.number),
       name:this.state.name
     })
 
@@ -29,6 +30,7 @@ export default class FormDepartment extends React.Component {
 
   updateDepartment(e){
     departmentService.edit({
+      number: parseInt(this.state.number),
       name:this.state.name
     })
     this.cleanInputs()
@@ -36,7 +38,7 @@ export default class FormDepartment extends React.Component {
 
   deleteDepartment(e){
     departmentService.delete({
-      id_department:this.state.id_department,
+      number:parseInt(this.state.number),
     })
     this.cleanInputs()
   }
@@ -47,14 +49,13 @@ export default class FormDepartment extends React.Component {
   }
   
   getDepartmentById(e){
-    departmentService.getById(this.state.id_department)
+    departmentService.getById(parseInt(this.state.number))
       .then(department => {
         this.setState({
-          id_department:department.id,
+          number:department.number.toString(),
           name:department.name,
         })
       })
-  
   }
   
   render() {
@@ -64,11 +65,11 @@ export default class FormDepartment extends React.Component {
           <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 7 }}> Administrar Departamentos </Text>
 
           <TextInput
-            placeholder="Digite el id"
-            onChangeText={textInputValue => this.setState({ id_department: textInputValue })}
+            placeholder="Digite el numero del departamento"
+            onChangeText={textInputValue => this.setState({ number: textInputValue })}
             underlineColorAndroid='transparent'
             style={styles.styleInput}
-            value={this.state.id_department}
+            value={this.state.number}
           />
 
           <TextInput
@@ -88,9 +89,6 @@ export default class FormDepartment extends React.Component {
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.deleteDepartment.bind(this)}>
               <Text style={styles.TextStyle}> Borrar </Text>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getDepartments.bind(this)}>
-              <Text style={styles.TextStyle}> Listar </Text>
             </TouchableOpacity>
             <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getDepartmentById.bind(this)}>
               <Text style={styles.TextStyle}> Buscar </Text>

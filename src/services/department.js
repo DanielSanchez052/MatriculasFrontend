@@ -11,7 +11,7 @@ export const departmentService =  {
     },
     edit : async (data)=>{
         try {
-            const res = await fetchWithoutToken(`department/${data.identification_number}`,JSON.stringify(data),'PUT')
+            const res = await fetchWithoutToken(`department/${data.number}/`,JSON.stringify(data),'PUT')
             return true
         } catch (error) {
             console.error(error)
@@ -19,7 +19,7 @@ export const departmentService =  {
     },
     delete : async (data)=>{
         try {
-            const res = await fetchWithoutToken(`department/${data.identification_number}`,JSON.stringify(data),'DELETE')
+            const res = await fetchWithoutToken(`department/${data.number}/`,JSON.stringify(data),'DELETE')
             return true
         } catch (error) {
             console.error(error)

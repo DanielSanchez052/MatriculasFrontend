@@ -11,7 +11,7 @@ export const gradesService =  {
     },
     edit : async (data)=>{
         try {
-            const res = await fetchWithoutToken(`grades/${data.identification_number}`,JSON.stringify(data),'PUT')
+            const res = await fetchWithoutToken(`grades/${data.number}/`,JSON.stringify(data),'PUT')
             return true
         } catch (error) {
             console.error(error)
@@ -19,7 +19,7 @@ export const gradesService =  {
     },
     delete : async (data)=>{
         try {
-            const res = await fetchWithoutToken(`grades/${data.identification_number}`,JSON.stringify(data),'DELETE')
+            const res = await fetchWithoutToken(`grades/${data.number}/`,JSON.stringify(data),'DELETE')
             return true
         } catch (error) {
             console.error(error)
@@ -28,7 +28,6 @@ export const gradesService =  {
     getAll : async ()=>{
         try {
             return await fetchWithoutToken('grades/')
-            return true
         } catch (error) {
             console.error(error)
         }
@@ -36,7 +35,6 @@ export const gradesService =  {
     getById : async (id)=>{
         try {
             return await fetchWithoutToken(`grades/${id}/`)
-            return true
         } catch (error) {
             console.error(error)
         }
