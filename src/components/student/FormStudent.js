@@ -6,6 +6,7 @@ export default class FormStudent extends React.Component {
     super(props)
     this.state = {
       identification_number:"",
+      email:"",
       name:"",
       last_name:"",
       second_last_name: "",
@@ -14,20 +15,22 @@ export default class FormStudent extends React.Component {
       phone_number:"",
       date_born:"",
       gender:"",
+      person_type:"",
       password:""
     }
   }
   cleanInputs(){
     this.setState({
       identification_number:"",
+      email:"",
       name:"",
       last_name:"",
-      second_last_name: "",
       city: "",
       direction:"",
       phone_number:"",
       date_born:"",
       gender:"",
+      person_type:"",
       password:""
     })
   }
@@ -35,14 +38,15 @@ export default class FormStudent extends React.Component {
   insertStudent(e){
     studentService.add({
       identification_number:this.state.identification_number,
+      email: this.state.email,
       name:this.state.name,
       last_name:this.state.last_name,
-      second_last_name: this.state.second_last_name,
       city: this.state.city,
       direction:this.state.direction,
       phone_number:this.state.phone_number,
       date_born:this.state.date_born,
       gender:this.state.gender,
+      person_type:person.person_type,
       password:this.state.password
     })
     this.cleanInputs()
@@ -51,14 +55,15 @@ export default class FormStudent extends React.Component {
   updateStudent(e){
     studentService.edit({
       identification_number:this.state.identification_number,
+      email: this.state.email,
       name:this.state.name,
       last_name:this.state.last_name,
-      second_last_name: this.state.second_last_name,
       city: this.state.city,
       direction:this.state.direction,
       phone_number:this.state.phone_number,
       date_born:this.state.date_born,
       gender:this.state.gender,
+      person_type:person.person_type,
       password:this.state.password
     })
     this.cleanInputs()
@@ -78,14 +83,28 @@ export default class FormStudent extends React.Component {
   
   getStudentById(e){
     studentService.getById(this.state.identification_number)
-    this.cleanInputs()
+      .then(person => {
+        this.setState({ 
+          identification_number:person.identification_number,
+          email: person.email,
+          name:person.name,
+          last_name:person.last_name,
+          city: person.city,
+          direction:person.direction,
+          phone_number:person.phone_number,
+          date_born:person.date_born,
+          gender:person.gender,
+          person_type:person.person_type,
+          password:"",
+        })
+      })
   }
 
   render() {
     return (
       <ScrollView>
         <View style={styles.container}>
-          <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 7 }}> Administrar Estudiantes </Text>
+          <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 7 }}> Administrar Personas </Text>
           
           
           <TextInput
@@ -96,6 +115,14 @@ export default class FormStudent extends React.Component {
             value={this.state.identification_number}
           />
 
+          <TextInput
+            placeholder="Digite El correo Electronico"
+            onChangeText={textInputValue => this.setState({ email:textInputValue })}
+            keyboardType="email-address"
+            underlineColorAndroid='transparent'
+            style={styles.styleInput}
+            value={this.state.email}
+          />
           
           <TextInput
             placeholder="Digite el nombre"
@@ -104,7 +131,6 @@ export default class FormStudent extends React.Component {
             style={styles.styleInput}
             value={this.state.name}
           />
-
           
           <TextInput
             placeholder="Digite el Apellido"
@@ -113,17 +139,7 @@ export default class FormStudent extends React.Component {
             style={styles.styleInput}
             value={this.state.last_name}
           />
-
-
-          <TextInput
-            placeholder="Digite el Segundo Apellido"
-            onChangeText={textInputValue => this.setState({ second_last_name: textInputValue })}
-            underlineColorAndroid='transparent'
-            style={styles.styleInput}
-            value={this.state.second_last_name}
-          />
-
-          
+    
           <TextInput
             placeholder="Digite la Ciudad"
             onChangeText={textInputValue => this.setState({ city: textInputValue })}
@@ -144,6 +160,7 @@ export default class FormStudent extends React.Component {
             placeholder="Digite el Numero de telefono"
             onChangeText={textInputValue => this.setState({ phone_number: textInputValue })}
             underlineColorAndroid='transparent'
+            keyboardType="number-pad"
             style={styles.styleInput}
             value={this.state.phone_number}
           />
@@ -157,16 +174,26 @@ export default class FormStudent extends React.Component {
           />
           
           <TextInput
-            placeholder="Digite la Genero"
+            placeholder="Digite el Genero (F, M)"
             onChangeText={textInputValue => this.setState({ gender: textInputValue })}
             underlineColorAndroid='transparent'
             style={styles.styleInput}
             value={this.state.gender}
           />
+
+          <TextInput
+            placeholder="Digite el tipo de person (S, T)"
+            onChangeText={textInputValue => this.setState({ person_type: textInputValue })}
+            underlineColorAndroid='transparent'
+            style={styles.styleInput}
+            value={this.state.person_type}
+          />
           
           <TextInput
             placeholder="Digite la Contraseña"
             onChangeText={textInputValue => this.setState({ password: textInputValue })}
+            secureTextEntry={true}
+            autoComplete="password"
             underlineColorAndroid='transparent'
             style={styles.styleInput}
             value={this.state.password}

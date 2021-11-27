@@ -3,7 +3,7 @@ import { fetchWithoutToken } from '../helpers/fetch.js'
 export const gradesService =  {
     add : async (data)=>{
         try {
-            const res = await fetchWithoutToken('grades.php',JSON.stringify(data),'POST')
+            const res = await fetchWithoutToken('grades/',JSON.stringify(data),'POST')
             return true
         } catch (error) {
             console.error(error)
@@ -11,7 +11,7 @@ export const gradesService =  {
     },
     edit : async (data)=>{
         try {
-            const res = await fetchWithoutToken('grades.php',JSON.stringify(data),'PUT')
+            const res = await fetchWithoutToken(`grades/${data.identification_number}`,JSON.stringify(data),'PUT')
             return true
         } catch (error) {
             console.error(error)
@@ -19,7 +19,7 @@ export const gradesService =  {
     },
     delete : async (data)=>{
         try {
-            const res = await fetchWithoutToken('grades.php',JSON.stringify(data),'DELETE')
+            const res = await fetchWithoutToken(`grades/${data.identification_number}`,JSON.stringify(data),'DELETE')
             return true
         } catch (error) {
             console.error(error)
@@ -27,8 +27,7 @@ export const gradesService =  {
     },
     getAll : async ()=>{
         try {
-            const res = await fetchWithoutToken('grades.php')
-            console.log( await res.json())
+            return await fetchWithoutToken('grades/')
             return true
         } catch (error) {
             console.error(error)
@@ -36,8 +35,7 @@ export const gradesService =  {
     },
     getById : async (id)=>{
         try {
-            const res = await fetchWithoutToken(`grades.php?id_grade=${id}`)
-            console.log( await res.json())
+            return await fetchWithoutToken(`grades/${id}/`)
             return true
         } catch (error) {
             console.error(error)

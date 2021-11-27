@@ -95,18 +95,19 @@ export default class FormTeacher extends React.Component {
 
     teacherService.getById(this.state.identification_number)
       .then(department => {
-        this.setState({
-          identification_number:department[0].identification_number,
-          name:department[0].name,
-          last_name:department[0].last_name,
-          second_last_name: department[0].second_last_name,
-          city: department[0].city,
-          direction:department[0].direction,
-          phone_number:department[0].phone_number,
-          date_born:department[0].date_born,
-          gender:department[0].gender,
+        console.log(department)
+        this.setState({ 
+          identification_number:department.identification_number,
+          email: student.email,
+          name:department.name,
+          last_name:department.last_name,
+          city: department.city,
+          direction:department.direction,
+          phone_number:department.phone_number,
+          date_born:department.date_born,
+          gender:department.gender,
           password:"",
-          id_department:department[0].department,
+          // id_department:department.department,
         })
       });
   }
@@ -217,19 +218,19 @@ export default class FormTeacher extends React.Component {
             </Picker>
           </View>
           <View style={styles.containerButton}>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.insertTeacher.bind(this)}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.insertTeacher.bind(this)} disabled>
               <Text style={styles.TextStyle}> Insertar </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.updateTeacher.bind(this)}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.updateTeacher.bind(this)} disabled>
               <Text style={styles.TextStyle}> Actualizar </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.deleteTeacher.bind(this)}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.deleteTeacher.bind(this)} disabled>
               <Text style={styles.TextStyle}> Borrar </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getTeachers.bind(this)}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getTeachers.bind(this)} disabled>
               <Text style={styles.TextStyle}> Listar </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getTeacherById.bind(this)}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getTeacherById.bind(this)} disabled >
               <Text style={styles.TextStyle}> Buscar </Text>
             </TouchableOpacity>
           </View>

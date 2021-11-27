@@ -1,57 +1,57 @@
 import React from 'react';
 import { Alert,StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity } from 'react-native';
-import {Picker} from '@react-native-picker/picker'
-import { departmentService } from '../../services/department.js'
+//import {Picker} from '@react-native-picker/picker'
+import { gradesService } from '../../services/grades'
 
-export default class FormDepartment extends React.Component {
+export default class FormGrade extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      id_department:"",
+      id_grade:"",
       name:"",
     }
   }
 
   cleanInputs(){
     this.setState({
-      id_department:"",
+      id_grade:"",
       name:"",
     })
   }
 
-  insertDepartment(e){
-    departmentService.add({
+  insertGrade(e){
+    gradesService.add({
       name:this.state.name
     })
 
     this.cleanInputs()
   }
 
-  updateDepartment(e){
-    departmentService.edit({
+  updateGrade(e){
+    gradesService.edit({
       name:this.state.name
     })
     this.cleanInputs()
   }
 
-  deleteDepartment(e){
-    departmentService.delete({
-      id_department:this.state.id_department,
+  deleteGrade(e){
+    gradesService.delete({
+      id_grade:this.state.id_grade,
     })
     this.cleanInputs()
   }
 
-  getDepartments(e){
-    departmentService.getAll()
+  getGrades(e){
+    gradesService.getAll()
     this.cleanInputs()
   }
   
-  getDepartmentById(e){
-    departmentService.getById(this.state.id_department)
-      .then(department => {
+  getGradeById(e){
+    gradesService.getById(this.state.id_grade)
+      .then(grade => {
         this.setState({
-          id_department:department.id,
-          name:department.name,
+          id_grade:grade.id,
+          name:grade.name,
         })
       })
   
@@ -61,14 +61,14 @@ export default class FormDepartment extends React.Component {
     return (
       <ScrollView>
         <View style={styles.container}>
-          <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 7 }}> Administrar Departamentos </Text>
+          <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 7 }}> Administrar Grados </Text>
 
           <TextInput
             placeholder="Digite el id"
-            onChangeText={textInputValue => this.setState({ id_department: textInputValue })}
+            onChangeText={textInputValue => this.setState({ id_grade: textInputValue })}
             underlineColorAndroid='transparent'
             style={styles.styleInput}
-            value={this.state.id_department}
+            value={this.state.id_grade}
           />
 
           <TextInput
@@ -80,19 +80,19 @@ export default class FormDepartment extends React.Component {
           />
 
           <View style={styles.containerButton}>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.insertDepartment.bind(this)}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.insertGrade.bind(this)}>
               <Text style={styles.TextStyle}> Insertar </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.updateDepartment.bind(this)}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.updateGrade.bind(this)}>
               <Text style={styles.TextStyle}> Actualizar </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.deleteDepartment.bind(this)}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.deleteGrade.bind(this)}>
               <Text style={styles.TextStyle}> Borrar </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getDepartments.bind(this)}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getGrades.bind(this)}>
               <Text style={styles.TextStyle}> Listar </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getDepartmentById.bind(this)}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getGradeById.bind(this)}>
               <Text style={styles.TextStyle}> Buscar </Text>
             </TouchableOpacity>
           </View>
