@@ -67,12 +67,6 @@ export default class ItemStudent extends React.Component {
               </View>
             </View>
           </View>
-          <TouchableWithoutFeedback onPress={this.props.onPress}>
-            <View style={styles.subCardView}>
-              <AntDesign name="right" size={20} color="black" />
-            </View>
-          </TouchableWithoutFeedback>
-            {/* <Text>{this.props.student.name} - {this.props.student.identification_number} </Text> */}
         </View>
     )
   }

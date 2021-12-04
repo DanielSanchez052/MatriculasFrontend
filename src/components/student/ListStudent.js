@@ -52,6 +52,7 @@ export default class ListStudent extends React.Component {
           </View>
             <FlatList
               data={this.state.dataSource}
+              keyExtractor={(item) => item.identification_number}
               renderItem={({item}) => 
                   <ItemStudent student={item} />
               }

@@ -26,7 +26,7 @@ export default class ListCourse extends React.Component {
             <FlatList
                 data={this.state.dataSource}
                 renderItem={({item}) => 
-                  <ItemCourse course={item}/>
+                  <ItemCourse course={item} key={item.id}/>
                 }
             />
         </View>

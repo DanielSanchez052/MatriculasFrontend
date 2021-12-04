@@ -6,7 +6,7 @@ export const fetchWithoutToken = async (endpoint, data="", method='GET')=>{
     const url = `${baseURL}/${endpoint}`
     if(method === 'GET'){
         const response = await fetch(url)
-        return await response.json();
+        return response
     }else{
         return await fetch(url,{
             method,

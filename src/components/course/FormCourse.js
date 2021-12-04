@@ -61,7 +61,6 @@ export default class FormCourse extends React.Component {
       teacher:this.state.teacher,
       grade:this.state.grade
     })
-
     this.cleanInputs()
   }
 
@@ -232,7 +231,6 @@ const styles = StyleSheet.create({
       marginRight:20,
       borderColor: 'black',
       borderBottomWidth:1,
-      borderRadius: 10,
       alignSelf: 'center'
     },
     TouchableOpacityStyle: {

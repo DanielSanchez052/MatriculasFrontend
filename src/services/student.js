@@ -3,48 +3,38 @@ import { fetchWithoutToken } from './../helpers/fetch.js'
 export const studentService =  {
     add : async (data)=>{
         try {
-            data["person_type"]="S"
             const res = await fetchWithoutToken(`person/`,JSON.stringify(data),'POST')
             return true
         } catch (error) {
-            console.error(error)
+            return false
         }
     },
     edit : async (data)=>{
-        try {
-            data["person_type"]="S"
             const res = await fetchWithoutToken(`person/${data.identification_number}/`,JSON.stringify(data),'PUT')
-            return true
-        } catch (error) {
-            console.error(error)
-        }
+            return await res
     },
     delete : async (data)=>{
         try {
             const res = await fetchWithoutToken(`person/${data.identification_number}/`,JSON.stringify(data),'DELETE')
             return true
         } catch (error) {
-            console.error(error)
+            return false
         }
     },
     getAll : async (type=NaN)=>{
         try {
             if(type != NaN && ( type == 'S' || type == 'T' )){
                 const res =  await fetchWithoutToken(`person/${type}/`)
-                return res
+                return await res.json()
             }
             const res =  await fetchWithoutToken(`person/`)
-            return res
+            return await res.json()
         } catch (error) {
             console.error(error)
         }
     },
     getById : async (id)=>{
-        try {
-            const res = await fetchWithoutToken(`person/${id}/`)
-            return await res
-        } catch (error) {
-            console.error(error)
-        }
+        const res = await fetchWithoutToken(`person/${id}/`)
+        return await res
     }
 }

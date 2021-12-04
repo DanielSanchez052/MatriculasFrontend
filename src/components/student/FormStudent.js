@@ -2,12 +2,13 @@ import React from 'react';
 import { Alert,StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity, FlatList } from 'react-native';
 import {Picker} from '@react-native-picker/picker'
 import { studentService } from '../../services/student.js'
+import Toast from 'react-native-toast-message'
+import {toastConfig} from '../../helpers/toastConfig.js'
 
 export default class FormStudent extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      initialLoad:true,
       identification_number:"",
       email:"",
       name:"",
@@ -20,11 +21,9 @@ export default class FormStudent extends React.Component {
       gender:"",
       person_type:"", 
       password:"",
-      dataSource:[]
+      errors:[]
     }
-  }
-  changeInitial(){
-    this.setState({initialLoad: false});
+
   }
 
   cleanInputs(){
@@ -39,7 +38,8 @@ export default class FormStudent extends React.Component {
       date_born:"",
       gender:"",
       person_type:"",
-      password:""
+      password:"",
+      errors:[]
     })
   }
 
@@ -54,27 +54,47 @@ export default class FormStudent extends React.Component {
       phone_number:this.state.phone_number,
       date_born:this.state.date_born,
       gender:this.state.gender,
-      person_type:person.person_type,
+      person_type:this.state.person_type,
       password:this.state.password
     })
     this.cleanInputs()
   }
 
-  updateStudent(e){
-    studentService.edit({
-      identification_number:this.state.identification_number,
-      email: this.state.email,
-      name:this.state.name,
-      last_name:this.state.last_name,
-      city: this.state.city,
-      direction:this.state.direction,
-      phone_number:this.state.phone_number,
-      date_born:this.state.date_born,
-      gender:this.state.gender,
-      person_type:person.person_type,
-      password:this.state.password
-    })
-    this.cleanInputs()
+  updateStudent = async(e) => {
+    try{
+      let res = await  studentService.edit({
+        identification_number:this.state.identification_number,
+        email: this.state.email,
+        name:this.state.name,
+        last_name:this.state.last_name,
+        city: this.state.city,
+        direction:this.state.direction,
+        phone_number:this.state.phone_number,
+        date_born:this.state.date_born,
+        gender:this.state.gender,
+        person_type:this.state.person_type,
+        password:this.state.password
+      })
+      
+      if(await res.status == 200){
+        console.log(await res.json())
+        Toast.show({ type: 'success', text1: 'Actualizado correctamnete' })
+        this.cleanInputs()
+      }else if(await res.status == 400){
+        let error = await res.json()
+        Toast.show({ type: 'error', text1: await error.message })
+        this.setState({ errors: await  error.errors })
+
+      }else{
+        let error = await res.json()
+        Toast.show({ type: 'error', text1: 'Error' })
+        this.setState({ errors: await  error.errors })
+      }
+    }catch (error) {
+      console.log(error)
+      Toast.show({ type: 'error', text1: 'Error' })
+    }
+    
   }
 
   deleteStudent(e){
@@ -89,29 +109,41 @@ export default class FormStudent extends React.Component {
     this.getStudentById(this.state.identification_number)
   }
 
-  getStudentById(id){
-    studentService.getById(id)
-      .then(person => {
+  getStudentById = async (id) => {
+    try{
+      let res = await studentService.getById(id)
+      if(await res.status == 200){
+        let person = await res.json()
         this.setState({ 
           identification_number:person.identification_number,
           email: person.email,
           name:person.name,
           last_name:person.last_name,
           city: person.city,
-          direction:person.direction,
-          phone_number:person.phone_number,
+          direction: person.direction ? person.direction : '',
+          phone_number:person.phone_number?person.phone_number:'',
           date_born:person.date_born,
           gender:person.gender,
           person_type:person.person_type,
-          password:""
+          password:''
         })
-      })
+        Toast.show({ type: 'success', text1: 'Encontrado' })
+
+      }else if(await res.status == 404){
+        Toast.show({ type: 'error', text1: 'El usuario no existe' })
+      }else{
+        Toast.show({ type: 'error', text1: 'Error' })
+      }
+    }catch{
+      Toast.show({ type: 'error', text1: 'Error' })
+    }  
   }
 
   render() {
     return (
       <ScrollView>
         <View style={styles.container}>
+        <Toast config={toastConfig} visibilityTime={1000}/>
           <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 7 }}> Administrar Personas </Text>
           <TextInput
             placeholder="Digite la identificación"
@@ -206,7 +238,11 @@ export default class FormStudent extends React.Component {
             underlineColorAndroid='transparent'
             style={styles.styleInput}
             value={this.state.password} />
-
+            {'password' in this.state.errors ? 
+              <Text style={styles.TextStyle}>this.props.errors.password</Text>
+              :
+              null
+            }
           <View style={styles.containerButton}>
             <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.insertStudent.bind(this)}>
               <Text style={styles.TextStyle}> Insertar </Text>
@@ -248,7 +284,7 @@ const styles = StyleSheet.create({
       marginRight:20,
       borderColor: 'black',
       borderBottomWidth:1,
-      borderRadius: 10,
+      height:30,
       alignSelf: 'center'
     },
     stylePicker: {
