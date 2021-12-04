@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; 
 
-export default class ItemStudent extends React.Component {
+export default class ItemTeacher extends React.Component {
   constructor(props) {
     super(props)
-    this.student = props.student
+    this.teacher = props.teacher
     this.state = {}
 
   }
@@ -15,7 +15,11 @@ export default class ItemStudent extends React.Component {
     return (
         <View style={styles.mainCardView}>
           <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-            
+            <TouchableWithoutFeedback onPress={this.props.onPress}>
+                <View style={styles.subCardView}>
+                  <Text>{this.teacher.number}</Text>
+                </View>
+              </TouchableWithoutFeedback>
             <View style={{marginLeft: 12}}>
               <Text
                 style={{
@@ -24,20 +28,14 @@ export default class ItemStudent extends React.Component {
                   fontWeight: 'bold',
                   textTransform: 'capitalize',
                 }}>
-                  { this.student.name} { this.student.last_name}
+                  { this.teacher.person.name}
               </Text>
               <View
                 style={{ marginTop: 4, borderWidth: 0, width: '100%',
                 }}>
-                  {  this.student.person_type === 'S' ? 
-                    <Text style={{ color: 'gray', fontSize: 12, }}>
-                      Estudiante
-                    </Text> 
-                    :
-                    <Text style={{ color: 'gray', fontSize: 12, }}>
-                      Profesor
-                    </Text> 
-                    }
+                  <Text style={{ color: 'gray', fontSize: 12, }}>
+                    { this.teacher.person.identification_number}
+                  </Text> 
               </View>
             </View>
           </View>
@@ -50,29 +48,10 @@ export default class ItemStudent extends React.Component {
                   fontWeight: 'bold',
                   textTransform: 'capitalize',
                 }}>
-                  { this.student.identification_number}
+                  { this.teacher.department.name}
               </Text>
-              <View
-                style={{ marginTop: 4, borderWidth: 0, width: '100%',
-                }}>
-                  {  this.student.gender === 'M' ? 
-                    <Text style={{ color: 'gray', fontSize: 12, }}>
-                      Masculino
-                    </Text> 
-                    :
-                    <Text style={{ color: 'gray', fontSize: 12, }}>
-                      Femenino
-                    </Text> 
-                    }
-              </View>
             </View>
           </View>
-          <TouchableWithoutFeedback onPress={this.props.onPress}>
-            <View style={styles.subCardView}>
-              <AntDesign name="right" size={20} color="black" />
-            </View>
-          </TouchableWithoutFeedback>
-            {/* <Text>{this.props.student.name} - {this.props.student.identification_number} </Text> */}
         </View>
     )
   }

@@ -1,11 +1,9 @@
 import { fetchWithoutToken } from '../helpers/fetch.js'
 
-export const teacherService =  {
+export const studentCourse =  {
     add : async (data)=>{
         try {
-
-            const res = await fetchWithoutToken('teacher/',JSON.stringify(data),'POST')
-            console.log(data)
+            const res = await fetchWithoutToken('student-course/',JSON.stringify(data),'POST')
             return true
         } catch (error) {
             console.error(error)
@@ -13,7 +11,7 @@ export const teacherService =  {
     },
     edit : async (data)=>{
         try {
-            const res = await fetchWithoutToken(`teacher/${data.number}/`,JSON.stringify(data),'PUT')
+            const res = await fetchWithoutToken(`student-course/${data.number}/`,JSON.stringify(data),'PUT')
             return true
         } catch (error) {
             console.error(error)
@@ -21,7 +19,7 @@ export const teacherService =  {
     },
     delete : async (data)=>{
         try {
-            const res = await fetchWithoutToken(`teacher/${data.number}/`,JSON.stringify(data),'DELETE')
+            const res = await fetchWithoutToken(`student-course/${data.number}/`,JSON.stringify(data),'DELETE')
             return true
         } catch (error) {
             console.error(error)
@@ -29,14 +27,14 @@ export const teacherService =  {
     },
     getAll : async ()=>{
         try {
-            return await fetchWithoutToken('teacher/')
+            return await fetchWithoutToken('student-course/')
         } catch (error) {
             console.error(error)
         }
     },
     getById : async (id)=>{
         try {
-            return await fetchWithoutToken(`teacher/${id}/`)
+            return await fetchWithoutToken(`student-course/${id}/`)
         } catch (error) {
             console.error(error)
         }

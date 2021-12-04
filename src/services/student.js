@@ -27,8 +27,12 @@ export const studentService =  {
             console.error(error)
         }
     },
-    getAll : async ()=>{
+    getAll : async (type=NaN)=>{
         try {
+            if(type != NaN && ( type == 'S' || type == 'T' )){
+                const res =  await fetchWithoutToken(`person/${type}/`)
+                return res
+            }
             const res =  await fetchWithoutToken(`person/`)
             return res
         } catch (error) {

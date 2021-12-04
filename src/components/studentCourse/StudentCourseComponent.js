@@ -3,23 +3,23 @@ import { NavigationContainer } from "@react-navigation/native"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { Ionicons } from '@expo/vector-icons'
 
-import ListStudent from './ListStudent.js'
-import FormStudent from '../student/FormStudent.js'
+import FormstudentCourse from './FormStudentCourse.js'
+import ListStudentCourse from './ListStudentCourse.js'
 
-export default class StudentComponent extends React.Component {
+export default class StudentCourseComponent extends React.Component {
     constructor(props) {
       super(props)
       this.state = {}
-      
+  
       this.Tab = createBottomTabNavigator();
     }
     render() {
       return (
-        // <NavigationContainer independent={true}>
+        <NavigationContainer independent={true}>
             <this.Tab.Navigator>
                 <this.Tab.Screen 
                   name="Modificar" 
-                  component={FormStudent} 
+                  component={FormstudentCourse} 
                   options={{
                     headerShown:false,
                     tabBarLabel: 'Modificar',
@@ -29,7 +29,7 @@ export default class StudentComponent extends React.Component {
                   }}/> 
                 <this.Tab.Screen 
                   name="Listar" 
-                  component={ListStudent} options={{
+                  component={ListStudentCourse} options={{
                     headerShown:false,
                     tabBarLabel: 'Listar',
                     tabBarIcon: ({ color, size }) => (
@@ -37,7 +37,7 @@ export default class StudentComponent extends React.Component {
                     ),
                 }} />
             </this.Tab.Navigator>
-        // </NavigationContainer>
+        </NavigationContainer>
         )
     }
   }

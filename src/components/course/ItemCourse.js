@@ -2,77 +2,45 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; 
 
-export default class ItemStudent extends React.Component {
+export default class ItemCourse extends React.Component {
   constructor(props) {
     super(props)
-    this.student = props.student
+    this.course = this.props.course
     this.state = {}
-
   }
 
- 
   render() {
     return (
         <View style={styles.mainCardView}>
-          <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-            
-            <View style={{marginLeft: 12}}>
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: 'black',
-                  fontWeight: 'bold',
-                  textTransform: 'capitalize',
-                }}>
-                  { this.student.name} { this.student.last_name}
-              </Text>
-              <View
-                style={{ marginTop: 4, borderWidth: 0, width: '100%',
-                }}>
-                  {  this.student.person_type === 'S' ? 
-                    <Text style={{ color: 'gray', fontSize: 12, }}>
-                      Estudiante
-                    </Text> 
-                    :
-                    <Text style={{ color: 'gray', fontSize: 12, }}>
-                      Profesor
-                    </Text> 
-                    }
-              </View>
-            </View>
-          </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-            <View style={{marginLeft: 12}}>
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: 'black',
-                  fontWeight: 'bold',
-                  textTransform: 'capitalize',
-                }}>
-                  { this.student.identification_number}
-              </Text>
-              <View
-                style={{ marginTop: 4, borderWidth: 0, width: '100%',
-                }}>
-                  {  this.student.gender === 'M' ? 
-                    <Text style={{ color: 'gray', fontSize: 12, }}>
-                      Masculino
-                    </Text> 
-                    :
-                    <Text style={{ color: 'gray', fontSize: 12, }}>
-                      Femenino
-                    </Text> 
-                    }
-              </View>
-            </View>
-          </View>
           <TouchableWithoutFeedback onPress={this.props.onPress}>
             <View style={styles.subCardView}>
-              <AntDesign name="right" size={20} color="black" />
+              <Text>{ this.course.number }</Text>
             </View>
           </TouchableWithoutFeedback>
-            {/* <Text>{this.props.student.name} - {this.props.student.identification_number} </Text> */}
+          <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{marginLeft: 12}}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: 'black',
+                  fontWeight: 'bold',
+                  textTransform: 'capitalize',
+                }}>
+                  { this.course.name}
+              </Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{marginLeft: 12}}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: 'black',
+                  fontWeight: 'bold',
+                  textTransform: 'capitalize',
+                }}></Text>
+            </View>
+          </View>
         </View>
     )
   }
@@ -123,5 +91,3 @@ const styles = StyleSheet.create({
       backgroundColor: '#4CAF50'
     },
   });
-  
-

@@ -3,234 +3,135 @@ import { Alert,StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity } 
 import {Picker} from '@react-native-picker/picker'
 import { teacherService } from '../../services/teacher.js'
 import { departmentService } from '../../services/department.js'
+import { studentService } from '../../services/student.js'
 
 export default class FormTeacher extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      identification_number:"",
-      name:"",
-      last_name:"",
-      second_last_name: "",
-      city: "",
-      direction:"",
-      phone_number:"",
-      date_born:"",
-      gender:"",
-      password:"",
-      id_department:"",
-      departments:[]
+      number:"",
+      person:"",
+      department:"",
+      dataDepartment:[],
+      dataPerson:[]
     }
   }
 
-  componentDidMount() { 
-    departmentService.getAll()
-      .then(departmentList => {
-          this.setState({ departments: departmentList  })
-      });
+  componentDidMount() {
+    this.getAllPersons()
+    this.getDepartments()
   }
 
   cleanInputs(){
     this.setState({
-      identification_number:"",
-      name:"",
-      last_name:"",
-      second_last_name: "",
-      city: "",
-      direction:"",
-      phone_number:"",
-      date_born:"",
-      gender:"",
-      password:"",
-      id_department:""
+      number:"",
+      person:"",
+      department:"",
     })
   }
 
   insertTeacher(e){
     teacherService.add({
-      identification_number:this.state.identification_number,
-      name:this.state.name,
-      last_name:this.state.last_name,
-      second_last_name: this.state.second_last_name,
-      city: this.state.city,
-      direction:this.state.direction,
-      phone_number:this.state.phone_number,
-      date_born:this.state.date_born,
-      gender:this.state.gender,
-      password:this.state.password,
-      id_department:this.state.id_department
+      number:this.state.number,
+      person:this.state.person,
+      department:this.state.department,
     })
     this.cleanInputs()
   }
 
   updateTeacher(e){
     teacherService.edit({
-      identification_number:this.state.identification_number,
-      name:this.state.name,
-      last_name:this.state.last_name,
-      second_last_name: this.state.second_last_name,
-      city: this.state.city,
-      direction:this.state.direction,
-      phone_number:this.state.phone_number,
-      date_born:this.state.date_born,
-      gender:this.state.gender,
-      password:this.state.password
+      number:this.state.number,
+      person:this.state.person,
+      department:this.state.department,
+
     })
     this.cleanInputs()
   }
 
   deleteTeacher(e){
     teacherService.delete({
-      identification_number:this.state.identification_number,
+      number:this.state.number,
     })
-    this.cleanInputs()
-  }
-
-  getTeachers(e){
-    teacherService.getAll()
     this.cleanInputs()
   }
   
   getTeacherById(e){
 
-    teacherService.getById(this.state.identification_number)
-      .then(department => {
-        console.log(department)
-        this.setState({ 
-          identification_number:department.identification_number,
-          email: student.email,
-          name:department.name,
-          last_name:department.last_name,
-          city: department.city,
-          direction:department.direction,
-          phone_number:department.phone_number,
-          date_born:department.date_born,
-          gender:department.gender,
-          password:"",
-          // id_department:department.department,
+    teacherService.getById(this.state.number)
+      .then(teacher => {
+        console.log(teacher.number)
+        this.setState({
+          number:teacher.number,
+          person:teacher.person.id,
+          department:teacher.department.id,
         })
       });
   }
+
+  getAllPersons(e){
+    studentService.getAll()
+      .then( res => this.setState({ dataPerson: res })
+      )
+  }
   
+  getDepartments(e){
+    departmentService.getAll()
+    .then( res => this.setState({ dataDepartment: res }) )
+  }
+
   render() {
     return (
       <ScrollView>
         <View style={styles.container}>
           <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 7 }}> Administrar Profesores </Text>
           
-          
           <TextInput
-            placeholder="Digite la identificación"
-            onChangeText={textInputValue => this.setState({ identification_number:textInputValue })}
+            placeholder="Digite el Numero de profesor"
+            onChangeText={textInputValue => this.setState({ number: textInputValue })}
             underlineColorAndroid='transparent'
+            keyboardType="number-pad"
             style={styles.styleInput}
-            value={this.state.identification_number}
+            value={this.state.number}
           />
-
-          
-          <TextInput
-            placeholder="Digite el nombre"
-            onChangeText={textInputValue => this.setState({ name: textInputValue })}
-            underlineColorAndroid='transparent'
-            style={styles.styleInput}
-            value={this.state.name}
-          />
-
-          
-          <TextInput
-            placeholder="Digite el Apellido"
-            onChangeText={textInputValue => this.setState({ last_name: textInputValue })}
-            underlineColorAndroid='transparent'
-            style={styles.styleInput}
-            value={this.state.last_name}
-          />
-
-
-          <TextInput
-            placeholder="Digite el Segundo Apellido"
-            onChangeText={textInputValue => this.setState({ second_last_name: textInputValue })}
-            underlineColorAndroid='transparent'
-            style={styles.styleInput}
-            value={this.state.second_last_name}
-          />
-
-          
-          <TextInput
-            placeholder="Digite la Ciudad"
-            onChangeText={textInputValue => this.setState({ city: textInputValue })}
-            underlineColorAndroid='transparent'
-            style={styles.styleInput}
-            value={this.state.city}
-          />
-          
-          <TextInput
-            placeholder="Digite la Direccion"
-            onChangeText={textInputValue => this.setState({ direction: textInputValue })}
-            underlineColorAndroid='transparent'
-            style={styles.styleInput}
-            value={this.state.direction}
-          />
-
-          <TextInput
-            placeholder="Digite el Numero de telefono"
-            onChangeText={textInputValue => this.setState({ phone_number: textInputValue })}
-            underlineColorAndroid='transparent'
-            style={styles.styleInput}
-            value={this.state.phone_number}
-          />
-
-          <TextInput
-            placeholder="Digite la Fecha de nacimiento"
-            onChangeText={textInputValue => this.setState({ date_born: textInputValue })}
-            underlineColorAndroid='transparent'
-            style={styles.styleInput}
-            value={this.state.date_born}
-          />
-          
-          <TextInput
-            placeholder="Digite la Genero"
-            onChangeText={textInputValue => this.setState({ gender: textInputValue })}
-            underlineColorAndroid='transparent'
-            style={styles.styleInput}
-            value={this.state.gender}
-          />
-          
-          <TextInput
-            placeholder="Digite la Contraseña"
-            onChangeText={textInputValue => this.setState({ password: textInputValue })}
-            underlineColorAndroid='transparent'
-            style={styles.styleInput}
-            value={this.state.password}
-          />
-
-          <View
-          style={styles.styleInput}>
-            <Picker 
-              selectedValue={this.state.id_department}
-              style={{textAlign:"center"}}
-              onValueChange={(itemValue, itemIndex) => this.setState({ id_department: itemValue })}>
+          <View style={styles.styleInput}>
+            <Picker
+              selectedValue={this.state.person}
+              onValueChange={(itemValue, itemIndex) => this.setState({person: itemValue})}
+              style={{width:'100%', height:40}}>
                 {
-                  this.state.departments.map(i =>
-                    <Picker.Item key={i.id_department} label={i.name} value={i.id_department} />
-                  )
+                  this.state.dataPerson.map( e => 
+                    <Picker.Item key={e.id} label={e.name +' '+e.last_name}  value={e.id} />
+                    )
                 }
-
             </Picker>
           </View>
+          
+          <View style={styles.styleInput}> 
+            <Picker
+              selectedValue={this.state.department}
+              onValueChange={(itemValue, itemIndex) => this.setState({department: itemValue})}
+              style={{width:'100%', height:40}}
+              >
+                {
+                  this.state.dataDepartment.map( e => 
+                    <Picker.Item key={e.id} label={e.name}  value={e.id} />
+                    )
+                }
+            </Picker>
+          </View>
+          
           <View style={styles.containerButton}>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.insertTeacher.bind(this)} disabled>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.insertTeacher.bind(this)}>
               <Text style={styles.TextStyle}> Insertar </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.updateTeacher.bind(this)} disabled>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.updateTeacher.bind(this)}>
               <Text style={styles.TextStyle}> Actualizar </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.deleteTeacher.bind(this)} disabled>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.deleteTeacher.bind(this)}>
               <Text style={styles.TextStyle}> Borrar </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getTeachers.bind(this)} disabled>
-              <Text style={styles.TextStyle}> Listar </Text>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getTeacherById.bind(this)} disabled >
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getTeacherById.bind(this)} >
               <Text style={styles.TextStyle}> Buscar </Text>
             </TouchableOpacity>
           </View>
@@ -245,8 +146,8 @@ const styles = StyleSheet.create({
     container: {
       alignItems: 'center',
       flex: 1,
-      paddingTop: 15,
-      backgroundColor: '#fff'
+      paddingTop: 20,
+      backgroundColor: '#fff',
     },
     containerButton:{ 
       justifyContent: 'center',
@@ -255,23 +156,14 @@ const styles = StyleSheet.create({
       flexDirection:'row',
     },
     styleInput: {
-      textAlign: 'center',
-      marginBottom: 7,
-      height: 40,
-      width: '80%',
-      borderWidth: 1,
-      borderColor: '#8BC34A',
-      borderRadius: 5,
-    },
-    styleInput: {
-      flex: 1,
-      justifyContent: 'center',
-      marginBottom: 7,
-      height: 40,
-      width: '80%',
-      borderWidth: 1,
-      borderColor: '#8BC34A',
-      borderRadius: 5,
+      width: '85%',
+      marginTop: 15,
+      marginLeft:20,
+      marginRight:20,
+      borderColor: 'black',
+      borderBottomWidth:1,
+      borderRadius: 10,
+      alignSelf: 'center'
     },
     TouchableOpacityStyle: {
       padding: 10,
@@ -279,7 +171,8 @@ const styles = StyleSheet.create({
       borderRadius: 5,
       marginBottom: 7,
       width: '45%',
-      backgroundColor: '#4CAF50'
+      backgroundColor: '#4CAF50',
+      zIndex:2
     },
   
     TextStyle: {

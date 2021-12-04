@@ -1,11 +1,13 @@
 import React from 'react';
 import { Alert,StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity, FlatList } from 'react-native';
-
+import {Picker} from '@react-native-picker/picker'
 import { studentService } from '../../services/student.js'
+
 export default class FormStudent extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      initialLoad:true,
       identification_number:"",
       email:"",
       name:"",
@@ -16,11 +18,15 @@ export default class FormStudent extends React.Component {
       phone_number:"",
       date_born:"",
       gender:"",
-      person_type:"",
+      person_type:"", 
       password:"",
       dataSource:[]
     }
   }
+  changeInitial(){
+    this.setState({initialLoad: false});
+  }
+
   cleanInputs(){
     this.setState({
       identification_number:"",
@@ -78,8 +84,13 @@ export default class FormStudent extends React.Component {
     this.cleanInputs()
   }
 
-  getStudentById(e){
-    studentService.getById(this.state.identification_number)
+  EventGetStudentById(e){
+    this.cleanInputs()
+    this.getStudentById(this.state.identification_number)
+  }
+
+  getStudentById(id){
+    studentService.getById(id)
       .then(person => {
         this.setState({ 
           identification_number:person.identification_number,
@@ -92,7 +103,7 @@ export default class FormStudent extends React.Component {
           date_born:person.date_born,
           gender:person.gender,
           person_type:person.person_type,
-          password:"",
+          password:""
         })
       })
   }
@@ -102,8 +113,6 @@ export default class FormStudent extends React.Component {
       <ScrollView>
         <View style={styles.container}>
           <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 7 }}> Administrar Personas </Text>
-          
-          
           <TextInput
             placeholder="Digite la identificación"
             onChangeText={textInputValue => this.setState({ identification_number:textInputValue })}
@@ -168,26 +177,27 @@ export default class FormStudent extends React.Component {
             underlineColorAndroid='transparent'
             style={styles.styleInput}
             value={this.state.date_born}
-          />
-          
+          />        
           <View style={styles.rowViewContainer}>
-            <TextInput
-              placeholder="Genero (F, M)"
-              onChangeText={textInputValue => this.setState({ gender: textInputValue })}
-              underlineColorAndroid='transparent'
-              style={styles.styleInputRow}
-              value={this.state.gender}
-            />
-
-            <TextInput
-              placeholder="tipo de persona (S, T)"
-              onChangeText={textInputValue => this.setState({ person_type: textInputValue })}
-              underlineColorAndroid='transparent'
-              style={styles.styleInputRow}
-              value={this.state.person_type}
-            />
+            <View style={styles.stylePicker}> 
+              <Picker
+                selectedValue={this.state.gender}
+                onValueChange={(itemValue, itemIndex) => this.setState({gender: itemValue})}
+                style={{width:'100%', height:40}}>
+                <Picker.Item label='Masculino' value='M' />
+                <Picker.Item label='Femenino' value='F' />
+              </Picker>
+            </View>
+            <View style={styles.stylePicker}> 
+              <Picker
+                selectedValue={this.state.person_type}
+                onValueChange={(itemValue, itemIndex) => this.setState({person_type: itemValue})}
+                style={{width:'100%', height:40}}>
+                <Picker.Item label='Estudiante' value='S' />
+                <Picker.Item label='Profesor' value='T' />
+              </Picker>
+            </View>
           </View>
-         
           <TextInput
             placeholder="Digite la Contraseña"
             onChangeText={textInputValue => this.setState({ password: textInputValue })}
@@ -207,7 +217,7 @@ export default class FormStudent extends React.Component {
             <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.deleteStudent.bind(this)}>
               <Text style={styles.TextStyle}> Borrar </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getStudentById.bind(this)}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.EventGetStudentById.bind(this)}>
               <Text style={styles.TextStyle}> Buscar </Text>
             </TouchableOpacity>
           </View>
@@ -232,15 +242,25 @@ const styles = StyleSheet.create({
       flexDirection:'row',
     },
     styleInput: {
-      textAlign: 'center',
-      marginBottom: 7,
-      height: 40,
-      width: '80%',
-      borderWidth: 1,
-      borderColor: '#8BC34A',
-      borderRadius: 5,
+      width: '85%',
+      marginTop: 15,
+      marginLeft:20,
+      marginRight:20,
+      borderColor: 'black',
+      borderBottomWidth:1,
+      borderRadius: 10,
+      alignSelf: 'center'
     },
-  
+    stylePicker: {
+      width: '40%',
+      marginTop: 15,
+      marginLeft:20,
+      marginRight:20,
+      borderColor: 'black',
+      borderBottomWidth:1,
+      borderRadius: 10,
+      alignSelf: 'center'
+    },
     TouchableOpacityStyle: {
       padding: 10,
       margin: 5,
@@ -256,14 +276,14 @@ const styles = StyleSheet.create({
     },
   
     rowViewContainer: {
-      flexDirection: 'row'
+      flexDirection: 'row',
     },
     styleInputRow: {
       textAlign: 'center',
       marginBottom: 7,
-      marginHorizontal: 10,
+      marginHorizontal: 5,
       height: 40,
-      width: '38%',
+      width: '100%',
       borderWidth: 1,
       borderColor: '#8BC34A',
       borderRadius: 5,

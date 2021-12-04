@@ -1,38 +1,44 @@
 import React from 'react';
-import { Alert,StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity, FlatList } from 'react-native';
-import { studentService } from '../../services/student.js'
-
+import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
+import { AntDesign } from '@expo/vector-icons'; 
 export default class ItemDepartment extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
-
   }
-
-
-//   getStudentById(e){
-//     studentService.getById(this.state.identification_number)
-//       .then(person => {
-//         this.setState({ 
-//           identification_number:person.identification_number,
-//           email: person.email,
-//           name:person.name,
-//           last_name:person.last_name,
-//           city: person.city,
-//           direction:person.direction,
-//           phone_number:person.phone_number,
-//           date_born:person.date_born,
-//           gender:person.gender,
-//           person_type:person.person_type,
-//           password:"",
-//         })
-//       })
-//   }
 
   render() {
     return (
-        <View style={styles.container}>
-            <Text>{this.props.department.number} - {this.props.department.name}</Text>
+        <View style={styles.mainCardView}>
+          <TouchableWithoutFeedback onPress={this.props.onPress}>
+            <View style={styles.subCardView}>
+              <Text>{ this.props.department.number }</Text>
+            </View>
+          </TouchableWithoutFeedback>
+          <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{marginLeft: 12}}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: 'black',
+                  fontWeight: 'bold',
+                  textTransform: 'capitalize',
+                }}>
+                  { this.props.department.name }
+              </Text>
+            </View>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{marginLeft: 12}}>
+              <Text
+                style={{
+                  fontSize: 14,
+                  color: 'black',
+                  fontWeight: 'bold',
+                  textTransform: 'capitalize',
+                }}></Text>
+            </View>
+          </View>
         </View>
     )
   }
@@ -46,8 +52,34 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         marginHorizontal: 16,
     },
-
-  
+    mainCardView: {
+      height: 90,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'white',
+      borderRadius: 1,
+      shadowColor: '#8C8C8C',
+      shadowOffset: {width: 0, height: 0},
+      shadowOpacity: 1,
+      shadowRadius: 8,
+      elevation: 8,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      paddingLeft: 16,
+      paddingRight: 14,
+      marginTop: 6,
+      marginBottom: 6,
+      marginLeft: 16,
+      marginRight: 16,
+    },
+    subCardView: {
+      height: 45,
+      width: 45,
+      borderRadius: 25,
+      backgroundColor: '#DCFFD9',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     TouchableOpacityStyle: {
       padding: 10,
       margin: 5,
@@ -57,5 +89,3 @@ const styles = StyleSheet.create({
       backgroundColor: '#4CAF50'
     },
   });
-  
-

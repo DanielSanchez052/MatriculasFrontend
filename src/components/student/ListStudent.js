@@ -1,53 +1,60 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar , FlatList } from 'react-native';
+import { StyleSheet, Text, View, StatusBar , FlatList, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { studentService } from '../../services/student.js'
 import ItemStudent from './ItemStudent.js'
+import { Feather } from '@expo/vector-icons'; 
 
 export default class ListStudent extends React.Component {
   constructor(props) {
     super(props)
+    this.navigation = props.navigation
+    this.route = props.route
     this.state = {
       dataSource:[]
     }
   }
 
-  getStudents(e){
+  getAllPersons(e){
     studentService.getAll()
+      .then( res => this.setState({ dataSource: res })
+      )
+  }
+
+  getStudents(e){
+    studentService.getAll('S')
+      .then( res => this.setState({ dataSource: res })
+      )
+  }
+
+  getTeachers(e){
+    studentService.getAll('T')
       .then( res => this.setState({ dataSource: res })
       )
   }
   
   componentDidMount(){
-    this.getStudents()
+    this.getAllPersons()
   }
-
-//   getStudentById(e){
-//     studentService.getById(this.state.identification_number)
-//       .then(person => {
-//         this.setState({ 
-//           identification_number:person.identification_number,
-//           email: person.email,
-//           name:person.name,
-//           last_name:person.last_name,
-//           city: person.city,
-//           direction:person.direction,
-//           phone_number:person.phone_number,
-//           date_born:person.date_born,
-//           gender:person.gender,
-//           person_type:person.person_type,
-//           password:"",
-//         })
-//       })
-//   }
 
   render() {
     return (
         <View style={styles.container}>
+          <View style={styles.containerButton}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle_xl} onPress={this.getStudents.bind(this)}>
+              <Text style={styles.TextStyle}> Estudiantes </Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle_sm} onPress={this.getAllPersons.bind(this)}>
+              <Text style={styles.TextStyle}> <Feather name="refresh-cw" size={24} color="white" /> </Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle_xl} onPress={this.getTeachers.bind(this)}>
+              <Text style={styles.TextStyle}> Profesores </Text>
+            </TouchableOpacity>
+          </View>
             <FlatList
-                data={this.state.dataSource}
-                renderItem={({item}) => 
-                  <ItemStudent student={item}/>
-                }
+              data={this.state.dataSource}
+              renderItem={({item}) => 
+                  <ItemStudent student={item} />
+              }
             />
         </View>
     )
@@ -62,27 +69,24 @@ const styles = StyleSheet.create({
     },
     containerButton:{ 
       justifyContent: 'center',
-      paddingTop: 20,
+      paddingTop: 2,
       flexWrap:'wrap',
       flexDirection:'row',
     },
-    styleInput: {
-      textAlign: 'center',
-      marginBottom: 7,
-      height: 40,
-
-      width: '80%',
-      borderWidth: 1,
-      borderColor: '#8BC34A',
-      borderRadius: 5,
-    },
   
-    TouchableOpacityStyle: {
+    TouchableOpacityStyle_sm: {
       padding: 10,
-      margin: 5,
+      marginHorizontal:5,
       borderRadius: 5,
       marginBottom: 7,
-      width: '45%',
+      width: '15%',
+      backgroundColor: '#4CAF50'
+    },
+    TouchableOpacityStyle_xl: {
+      padding: 10,
+      borderRadius: 5,
+      marginBottom: 7,
+      width: '40%',
       backgroundColor: '#4CAF50'
     },
   

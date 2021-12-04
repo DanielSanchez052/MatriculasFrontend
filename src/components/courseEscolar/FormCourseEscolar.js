@@ -1,59 +1,63 @@
 import React from 'react';
 import { Alert,StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity } from 'react-native';
-import {Picker} from '@react-native-picker/picker'
-import { departmentService } from '../../services/department.js'
+import { courseEscolarService } from '../../services/courseEscolar.js'
 
-export default class FormDepartment extends React.Component {
+export default class FormCourseEscolar extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       number:"",
-      name:"",
+      start_year:"",
+      end_year:"",
     }
   }
 
   cleanInputs(){
     this.setState({
       number:"",
-      name:"",
+      start_year:"",
+      end_year:"",
     })
   }
 
-  insertDepartment(e){
-    departmentService.add({
+  insertCourseEscolar(e){
+    courseEscolarService.add({
       number: parseInt(this.state.number),
-      name:this.state.name
+      start_year:this.state.start_year,
+      end_year:this.state.end_year
     })
 
     this.cleanInputs()
   }
 
-  updateDepartment(e){
-    departmentService.edit({
+  updateCourseEscolar(e){
+    courseEscolarService.edit({
       number: parseInt(this.state.number),
-      name:this.state.name
+      start_year:this.state.start_year,
+      end_year:this.state.end_year
     })
     this.cleanInputs()
   }
 
-  deleteDepartment(e){
-    departmentService.delete({
+  deleteCourseEscolar(e){
+    courseEscolarService.delete({
       number:parseInt(this.state.number),
     })
     this.cleanInputs()
   }
 
-  getDepartments(e){
-    departmentService.getAll()
+  geCourseEscolar(e){
+    courseEscolarService.getAll()
     this.cleanInputs()
   }
   
-  getDepartmentById(e){
-    departmentService.getById(parseInt(this.state.number))
-      .then(department => {
+  getCourseEscolarById(e){
+    courseEscolarService.getById(parseInt(this.state.number))
+      .then(courseEscolar => {
         this.setState({
-          number:department.number.toString(),
-          name:department.name,
+          number:courseEscolar.number.toString(),
+          start_year:courseEscolar.start_year,
+          end_year:courseEscolar.end_year,
         })
       })
   }
@@ -62,10 +66,10 @@ export default class FormDepartment extends React.Component {
     return (
       <ScrollView>
         <View style={styles.container}>
-          <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 7 }}> Administrar Departamentos </Text>
+          <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 7 }}> Administrar Curso escolar </Text>
 
           <TextInput
-            placeholder="Digite el numero del departamento"
+            placeholder="Digite el numero del curso escolar"
             onChangeText={textInputValue => this.setState({ number: textInputValue })}
             underlineColorAndroid='transparent'
             style={styles.styleInput}
@@ -73,24 +77,34 @@ export default class FormDepartment extends React.Component {
           />
 
           <TextInput
-            placeholder="Digite el nombre"
-            onChangeText={textInputValue => this.setState({ name: textInputValue })}
+            placeholder="Digite el año de inicio"
+            onChangeText={textInputValue => this.setState({ start_year: textInputValue })}
             underlineColorAndroid='transparent'
+            keyboardType='numeric'
             style={styles.styleInput}
-            value={this.state.name}
+            value={this.state.start_year ? String(this.state.start_year) : null}
+          />
+
+          <TextInput
+            placeholder="Digite el año de finalizacion"
+            onChangeText={textInputValue => this.setState({ end_year: textInputValue })}
+            underlineColorAndroid='transparent'
+            keyboardType='number-pad'
+            style={styles.styleInput}
+            value={this.state.end_year}
           />
 
           <View style={styles.containerButton}>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.insertDepartment.bind(this)}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.insertCourseEscolar.bind(this)}>
               <Text style={styles.TextStyle}> Insertar </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.updateDepartment.bind(this)}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.updateCourseEscolar.bind(this)}>
               <Text style={styles.TextStyle}> Actualizar </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.deleteDepartment.bind(this)}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.deleteCourseEscolar.bind(this)}>
               <Text style={styles.TextStyle}> Borrar </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getDepartmentById.bind(this)}>
+            <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.getCourseEscolarById.bind(this)}>
               <Text style={styles.TextStyle}> Buscar </Text>
             </TouchableOpacity>
           </View>
