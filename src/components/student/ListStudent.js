@@ -15,18 +15,21 @@ export default class ListStudent extends React.Component {
   }
 
   getAllPersons(e){
+    this.setState({dataSource:[]})
     studentService.getAll()
       .then( res => this.setState({ dataSource: res })
       )
   }
 
   getStudents(e){
+    this.setState({dataSource:[]})
     studentService.getAll('S')
       .then( res => this.setState({ dataSource: res })
       )
   }
 
   getTeachers(e){
+    this.setState({dataSource:[]})
     studentService.getAll('T')
       .then( res => this.setState({ dataSource: res })
       )
@@ -51,6 +54,7 @@ export default class ListStudent extends React.Component {
             </TouchableOpacity>
           </View>
             <FlatList
+              style={{marginTop:10}}
               data={this.state.dataSource}
               keyExtractor={(item) => item.identification_number}
               renderItem={({item}) => 
@@ -64,45 +68,45 @@ export default class ListStudent extends React.Component {
 
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      marginTop: StatusBar.currentHeight || 0,
-    },
-    containerButton:{ 
-      justifyContent: 'center',
-      paddingTop: 2,
-      flexWrap:'wrap',
-      flexDirection:'row',
-    },
-  
-    TouchableOpacityStyle_sm: {
-      padding: 10,
-      marginHorizontal:5,
-      borderRadius: 5,
-      marginBottom: 7,
-      width: '15%',
-      backgroundColor: '#4CAF50'
-    },
-    TouchableOpacityStyle_xl: {
-      padding: 10,
-      borderRadius: 5,
-      marginBottom: 7,
-      width: '40%',
-      backgroundColor: '#4CAF50'
-    },
-  
-    TextStyle: {
-      color: '#fff',
-      textAlign: 'center',
-    },
-  
-    rowViewContainer: {
-      fontSize: 20,
-      paddingRight: 10,
-      paddingTop: 10,
-      paddingBottom: 10,
-    }
-  
-  });
+  container: {
+    flex: 1,
+    marginTop: 10,
+    zIndex:1
+  },
+  containerButton:{ 
+    justifyContent: 'flex-end',
+    flexWrap:'wrap',
+    flexDirection:'row',
+    marginRight:10,
+    zIndex:10
+  },
+
+  TouchableOpacityStyle_sm: {
+    padding: 10,
+    marginHorizontal:5,
+    borderRadius: 5,
+    width: '15%',
+    backgroundColor: '#4CAF50'
+  },
+  TouchableOpacityStyle_xl: {
+    padding: 10,
+    borderRadius: 5,
+    width: '40%',
+    backgroundColor: '#4CAF50'
+  },
+
+  TextStyle: {
+    color: '#fff',
+    textAlign: 'center',
+  },
+
+  rowViewContainer: {
+    fontSize: 20,
+    paddingRight: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+  }
+
+});
   
 

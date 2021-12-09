@@ -2,41 +2,27 @@ import { fetchWithoutToken } from '../helpers/fetch.js'
 
 export const gradesService =  {
     add : async (data)=>{
-        try {
-            const res = await fetchWithoutToken('grades/',JSON.stringify(data),'POST')
-            return true
-        } catch (error) {
-            console.error(error)
-        }
+        const res = await fetchWithoutToken('grades/',JSON.stringify(data),'POST')
+        return await res
     },
     edit : async (data)=>{
-        try {
-            const res = await fetchWithoutToken(`grades/${data.number}/`,JSON.stringify(data),'PUT')
-            return true
-        } catch (error) {
-            console.error(error)
-        }
+        const res = await fetchWithoutToken(`grades/${data.number}/`,JSON.stringify(data),'PUT')
+        return await res
     },
     delete : async (data)=>{
-        try {
-            const res = await fetchWithoutToken(`grades/${data.number}/`,JSON.stringify(data),'DELETE')
-            return true
-        } catch (error) {
-            console.error(error)
-        }
+        const res = await fetchWithoutToken(`grades/${data.number}/`,JSON.stringify(data),'DELETE')
+        return await res
     },
     getAll : async ()=>{
         try {
-            return await fetchWithoutToken('grades/')
+            let res = await fetchWithoutToken('grades/')
+            return await res.json()
         } catch (error) {
             console.error(error)
         }
     },
     getById : async (id)=>{
-        try {
-            return await fetchWithoutToken(`grades/${id}/`)
-        } catch (error) {
-            console.error(error)
-        }
+        const res = await fetchWithoutToken(`grades/${id}/`)
+        return await res
     }
 }

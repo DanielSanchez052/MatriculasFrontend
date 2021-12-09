@@ -1,7 +1,10 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer'
 import { NavigationContainer } from '@react-navigation/native'
+import { StyleSheet } from 'react-native'
+
 import {navigationRef, navigate} from './src/helpers/navigationRef.js'
+import FlashMessage from "react-native-flash-message"
 
 import StudentComponent from './src/components/student/StudentComponent.js'
 import TeacherComponent from './src/components/teacher/TeacherComponent.js'
@@ -17,24 +20,38 @@ export default class App extends React.Component {
     super(props)
     this.state = {
     }
-    this.Drawer = createDrawerNavigator()
-    
+    this.Drawer = createDrawerNavigator() 
   }
 
   render() {
     return (
-      <NavigationContainer ref={navigationRef}>
-        <this.Drawer.Navigator initialRouteName="Personas" >
-          <this.Drawer.Screen name="Personas"  component={StudentComponent} />
-          <this.Drawer.Screen name="Profesores" component={TeacherComponent} />
-          <this.Drawer.Screen name="Cursos" component={CourseComponent} />
-          <this.Drawer.Screen name="Grados" component={GradeComponent} />
-          <this.Drawer.Screen name="Departamentos" component={DepartmentComponent} />
-          <this.Drawer.Screen name="CourseEscolar" component={CourseEscolarComponent} />
-          <this.Drawer.Screen name="Estudiantes-Curso" component={StudentCourseComponent} />
-        </this.Drawer.Navigator>
-      </NavigationContainer>    
+      <>
+        <NavigationContainer ref={navigationRef}>
+          <this.Drawer.Navigator initialRouteName="Personas" >
+            <this.Drawer.Screen name="Personas"  component={StudentComponent} />
+            <this.Drawer.Screen name="Profesores" component={TeacherComponent} />
+            <this.Drawer.Screen name="Cursos" component={CourseComponent} />
+            <this.Drawer.Screen name="Grados" component={GradeComponent} />
+            <this.Drawer.Screen name="Departamentos" component={DepartmentComponent} />
+            <this.Drawer.Screen name="CourseEscolar" component={CourseEscolarComponent} />
+            <this.Drawer.Screen name="Estudiantes-Curso" component={StudentCourseComponent} />
+          </this.Drawer.Navigator>
+        </NavigationContainer>  
+
+        {/* Toast Component */}
+        <FlashMessage position="center"  style={styles.flashMessage}/>
+      </>
       )
   }
 }
 
+const styles = StyleSheet.create({
+  flashMessage:{
+    position:'absolute', 
+    width:'100%', 
+    justifyContent:'center', 
+    alignItems:'center',           
+    height:40, 
+    top:10
+  }
+});

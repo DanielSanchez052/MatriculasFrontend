@@ -12,11 +12,6 @@ export default class ItemCourse extends React.Component {
   render() {
     return (
         <View style={styles.mainCardView}>
-          <TouchableWithoutFeedback onPress={this.props.onPress}>
-            <View style={styles.subCardView}>
-              <Text>{ this.course.number }</Text>
-            </View>
-          </TouchableWithoutFeedback>
           <View style={{ flexDirection: 'row', alignItems: 'center'}}>
             <View style={{marginLeft: 12}}>
               <Text
@@ -25,22 +20,16 @@ export default class ItemCourse extends React.Component {
                   color: 'black',
                   fontWeight: 'bold',
                   textTransform: 'capitalize',
+                  textAlign:'center'
+                }}>{this.course.number}</Text>
+                <View
+                style={{ marginTop: 4, borderWidth: 0, width: '100%',
                 }}>
-                  { this.course.name}
-              </Text>
+                  <Text style={{ color: 'gray', fontSize: 12,textAlign:'center' }}>{ this.course.name}</Text> 
+              </View>
             </View>
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-            <View style={{marginLeft: 12}}>
-              <Text
-                style={{
-                  fontSize: 14,
-                  color: 'black',
-                  fontWeight: 'bold',
-                  textTransform: 'capitalize',
-                }}></Text>
-            </View>
-          </View>
+          
         </View>
     )
   }
@@ -66,7 +55,7 @@ const styles = StyleSheet.create({
       shadowRadius: 8,
       elevation: 8,
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
       paddingLeft: 16,
       paddingRight: 14,
       marginTop: 6,

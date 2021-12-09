@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     subCardView: {
       height: 45,
       width: 45,
-      borderRadius: 25,
+      borderRadius: 15,
       backgroundColor: '#DCFFD9',
       alignItems: 'center',
       justifyContent: 'center',

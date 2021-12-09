@@ -1,9 +1,12 @@
-import React from 'react';
-import { Alert,StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity } from 'react-native';
+import React from 'react'
+import { Alert,StyleSheet, Text, View, ScrollView,TextInput, TouchableOpacity } from 'react-native'
 import {Picker} from '@react-native-picker/picker'
+import { showMessage, hideMessage  } from "react-native-flash-message"
+
 import { teacherService } from '../../services/teacher.js'
 import { departmentService } from '../../services/department.js'
 import { studentService } from '../../services/student.js'
+import {validators} from '../../helpers/validators'
 
 export default class FormTeacher extends React.Component {
   constructor(props) {
@@ -13,7 +16,8 @@ export default class FormTeacher extends React.Component {
       person:"",
       department:"",
       dataDepartment:[],
-      dataPerson:[]
+      dataPerson:[],
+      errors:[]
     }
   }
 
@@ -22,57 +26,120 @@ export default class FormTeacher extends React.Component {
     this.getDepartments()
   }
 
-  cleanInputs(){
+  cleanInputs(error=0){
     this.setState({
       number:"",
       person:"",
       department:"",
     })
+    error === 0 
+    ?
+    this.setState({errors:[]})
+    :
+    null
   }
 
-  insertTeacher(e){
-    teacherService.add({
-      number:this.state.number,
-      person:this.state.person,
-      department:this.state.department,
-    })
-    this.cleanInputs()
+  insertTeacher = async (e) => {
+    try{
+      let res = await teacherService.add({
+        number:this.state.number,
+        person:this.state.person,
+        department:this.state.department,
+      })
+      if(res.ok){
+        showMessage({ type: 'success', message: 'Insertado correctamente' })
+        this.cleanInputs()
+      }else{
+        let error = await res.json()
+        showMessage({ type: 'danger', message: "Error al insertar el profesor"})
+        this.setState({ errors: error })
+      }
+    }catch (error) {
+      showMessage({ type: 'danger', message: 'Error' })
+    }
+    this.cleanInputs(1)
   }
 
-  updateTeacher(e){
-    teacherService.edit({
-      number:this.state.number,
-      person:this.state.person,
-      department:this.state.department,
-
-    })
-    this.cleanInputs()
+  validateNumber(text,stateName){
+    let state = {}
+    state[stateName] = text 
+    validators.validateNumber(text) || this.state[stateName].length == 1
+              ? this.setState(state) : ''
   }
 
-  deleteTeacher(e){
-    teacherService.delete({
-      number:this.state.number,
-    })
+  updateTeacher = async (e) => {
+    try{
+      let res = await teacherService.edit({
+        number:this.state.number,
+        person:this.state.person,
+        department:this.state.department,
+      })
+      if(res.ok){
+        showMessage({ type: 'success', message: 'Actualizado correctamente' })
+        this.cleanInputs()
+      }else if(res.status == 404){
+        showMessage({ type: 'danger', message: 'El Profesor no existe' })
+      }else{
+        let error = await res.json()
+        showMessage({ type: 'danger', message: error.message })
+        this.setState({ errors: error.errors })
+      }
+    }catch (error) {
+      console.log(error)
+      showMessage({ type: 'danger', message: 'Error' })
+    }
+  }
+
+  deleteTeacher = async (e) => {
+    try{
+      let res = await  teacherService.delete({
+        number:this.state.number,
+      })
+      if(res.ok){
+        showMessage({ type: 'success', message: "Eliminado Correctamente"})
+      }else if(await res.status == 404){
+        let error = await res.json()
+        showMessage({ type: 'danger', message: error.message })
+      }else{
+        let error = await res.json()
+        showMessage({ type: 'danger', message: 'Error al eliminar el Profesor' })
+        console.log(error)
+      }
+    }catch (error) {
+      console.log(error)
+      showMessage({ type: 'danger', message: 'Error' })
+    }
     this.cleanInputs()
   }
   
-  getTeacherById(e){
-
-    teacherService.getById(this.state.number)
-      .then(teacher => {
-        console.log(teacher.number)
+  getTeacherById = async (e) => {
+    try{
+      this.cleanInputs()
+      let res = await teacherService.getById(this.state.number)
+      if(await res.status == 200){
+        let teacher = await res.json()
         this.setState({
-          number:teacher.number,
+          number: String(teacher.number),
           person:teacher.person.id,
           department:teacher.department.id,
         })
-      });
+        showMessage({ type: 'success', message: 'Profesor Encontrado' })
+
+      }else if(await res.status == 404){
+        showMessage({ type: 'danger', message: 'El profesor no existe' })
+      }else{
+        showMessage({ type: 'danger', message: 'Error' })
+      }
+    }catch{
+      showMessage({ type: 'danger', message: 'Error' })
+    }  
   }
 
   getAllPersons(e){
     studentService.getAll()
-      .then( res => this.setState({ dataPerson: res })
-      )
+      .then( res => {
+        this.setState({ dataPerson: res.filter( e => e.person_type=='T') })
+      })
   }
   
   getDepartments(e){
@@ -84,17 +151,20 @@ export default class FormTeacher extends React.Component {
     return (
       <ScrollView>
         <View style={styles.container}>
-          <Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 7 }}> Administrar Profesores </Text>
-          
           <TextInput
             placeholder="Digite el Numero de profesor"
-            onChangeText={textInputValue => this.setState({ number: textInputValue })}
+            onChangeText={textInputValue => this.validateNumber(textInputValue,'number')}
             underlineColorAndroid='transparent'
             keyboardType="number-pad"
             style={styles.styleInput}
             value={this.state.number}
           />
-          <View style={styles.styleInput}>
+            { 'number' in this.state.errors ? 
+              <Text style={styles.error}>{this.state.errors.number[0]}</Text>
+              :
+              null
+            }
+          <View style={styles.stylePicker}>
             <Picker
               selectedValue={this.state.person}
               onValueChange={(itemValue, itemIndex) => this.setState({person: itemValue})}
@@ -106,8 +176,12 @@ export default class FormTeacher extends React.Component {
                 }
             </Picker>
           </View>
-          
-          <View style={styles.styleInput}> 
+          { 'person' in this.state.errors ? 
+              <Text style={styles.error}>{this.state.errors.person[0]}</Text>
+              :
+              null
+            }
+          <View style={styles.stylePicker}> 
             <Picker
               selectedValue={this.state.department}
               onValueChange={(itemValue, itemIndex) => this.setState({department: itemValue})}
@@ -120,7 +194,11 @@ export default class FormTeacher extends React.Component {
                 }
             </Picker>
           </View>
-          
+          { 'department' in this.state.errors ? 
+              <Text style={styles.error}>{this.state.errors.department[0]}</Text>
+              :
+              null
+            }
           <View style={styles.containerButton}>
             <TouchableOpacity activeOpacity={.4} style={styles.TouchableOpacityStyle} onPress={this.insertTeacher.bind(this)}>
               <Text style={styles.TextStyle}> Insertar </Text>
@@ -146,8 +224,9 @@ const styles = StyleSheet.create({
     container: {
       alignItems: 'center',
       flex: 1,
-      paddingTop: 20,
+      paddingTop: 15,
       backgroundColor: '#fff',
+      height:'100%'
     },
     containerButton:{ 
       justifyContent: 'center',
@@ -162,7 +241,15 @@ const styles = StyleSheet.create({
       marginRight:20,
       borderColor: 'black',
       borderBottomWidth:1,
-      borderRadius: 10,
+      height:45,
+      alignSelf: 'center'
+    },
+    stylePicker: {
+      width: '85%',
+      marginTop: 15,
+      marginLeft:20,
+      marginRight:20,
+      height:45,
       alignSelf: 'center'
     },
     TouchableOpacityStyle: {
@@ -179,7 +266,10 @@ const styles = StyleSheet.create({
       color: '#fff',
       textAlign: 'center',
     },
-  
+    error:{
+      color: '#FE8A8A',
+      textAlign: 'center',
+    },
     rowViewContainer: {
       fontSize: 20,
       paddingRight: 10,

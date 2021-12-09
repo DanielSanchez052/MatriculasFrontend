@@ -4,7 +4,7 @@ export const studentService =  {
     add : async (data)=>{
         try {
             const res = await fetchWithoutToken(`person/`,JSON.stringify(data),'POST')
-            return true
+            return await res
         } catch (error) {
             return false
         }
@@ -16,7 +16,7 @@ export const studentService =  {
     delete : async (data)=>{
         try {
             const res = await fetchWithoutToken(`person/${data.identification_number}/`,JSON.stringify(data),'DELETE')
-            return true
+            return await res
         } catch (error) {
             return false
         }

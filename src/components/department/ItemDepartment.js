@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
-import { AntDesign } from '@expo/vector-icons'; 
+
 export default class ItemDepartment extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
-  }
+  } 
 
   render() {
     return (
@@ -74,8 +74,8 @@ const styles = StyleSheet.create({
     },
     subCardView: {
       height: 45,
-      width: 45,
-      borderRadius: 25,
+      width: '30%',
+      borderRadius: 15,
       backgroundColor: '#DCFFD9',
       alignItems: 'center',
       justifyContent: 'center',
